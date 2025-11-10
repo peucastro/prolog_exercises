@@ -25,7 +25,7 @@
                 glibc
                 rlwrap
               ]);
-              runScript = "./sp-4.10.1-x86_64-linux-glibc2.28/bin/sicstus";
+              runScript = "rlwrap ./sp-4.10.1-x86_64-linux-glibc2.28/bin/sicstus";
             })
           ];
         };
