@@ -7,7 +7,6 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     utils,
     ...
@@ -24,11 +23,9 @@
               name = "sicstus";
               targetPkgs = pkgs: (with pkgs; [
                 glibc
+                rlwrap
               ]);
-              runScript = ''
-                /usr/bin/env bash
-                ${self}/sp-4.10.1-x86_64-linux-glibc2.28/bin/sicstus
-              '';
+              runScript = "./sp-4.10.1-x86_64-linux-glibc2.28/bin/sicstus";
             })
           ];
         };
