@@ -110,7 +110,7 @@ father(X, Y) :-
     male(X),
     parent(X, Y).
 
-grandparent(X, Y) :-
+grandfather(X, Y) :-
     male(X),
     parent(X, K),
     parent(K, Y).
@@ -127,3 +127,20 @@ siblings(X, Y) :-
     parent(M, Y),
     X \= Y,
     P \= M.
+
+halfSiblings(X, Y) :-
+    parent(P, X),
+    parent(P, Y),
+    X \= Y,
+    \+ siblings(X, Y).
+
+cousins(X, Y) :-
+    parent(X1, X),
+    parent(Y1, Y),
+    siblings(X1, Y1),
+    X \= Y.
+
+uncle(X, Y) :-
+    parent(P, Y),
+    siblings(P, X).
+
