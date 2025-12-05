@@ -1,28 +1,29 @@
-female(grace).
 male(frank).
-female(dede).
 male(jay).
-female(gloria).
 male(javier).
-male(barb).
 male(merle).
 male(phil).
-female(claire).
 male(mitchell).
 male(joe).
-female(manny).
 male(cameron).
-female(pameron).
-make(bo).
+male(bo).
 male(dylan).
-female(haley).
 male(alex).
 male(luke).
-female(lily).
 male(rexford).
 male(calhoun).
 male(george).
 male(poppy).
+
+female(grace).
+female(dede).
+female(gloria).
+female(claire).
+female(barb).
+female(manny).
+female(pameron).
+female(haley).
+female(lily).
 
 parent(grace, phil).
 parent(frank, phil).
@@ -35,7 +36,7 @@ parent(gloria, joe).
 parent(gloria, manny).
 parent(javier, manny).
 parent(barb, cameron).
-parent(bard, pameron).
+parent(barb, pameron).
 parent(merle, cameron).
 parent(merle, pameron).
 parent(phil, haley).
@@ -106,41 +107,30 @@ Y = alex ? ;
 no
 */
 
-father(X, Y) :-
-    male(X),
-    parent(X, Y).
+father(X, Y) :- parent(X, Y),
+                male(X).
 
-grandfather(X, Y) :-
-    male(X),
-    parent(X, K),
-    parent(K, Y).
+mother(X, Y) :- parent(X, Y),
+                female(X).
 
-grandmother(X, Y) :-
-    female(X),
-    parent(X, K),
-    parent(K, Y).
+grandparent(X, Y) :- father(X, _K),
+                     parent(_K, Y).
 
-siblings(X, Y) :-
-    parent(P, X),
-    parent(P, Y),
-    parent(M, X),
-    parent(M, Y),
-    X \= Y,
-    P \= M.
+grandmother(X, Y) :- mother(X, _K),
+                     parent(_K, Y).
 
-halfSiblings(X, Y) :-
-    parent(P, X),
-    parent(P, Y),
-    X \= Y,
-    \+ siblings(X, Y).
+siblings(X, Y) :- father(_F, X),
+                  father(_F, Y),
+                  mother(_M, X),
+                  mother(_M, Y),
+                  X \= Y.
 
-cousins(X, Y) :-
-    parent(X1, X),
-    parent(Y1, Y),
-    siblings(X1, Y1),
-    X \= Y.
+halfSiblings(X, Y) :- father(_F, X), father(_F, Y),
+                      mother(_M1, X), mother(_M2, Y),
+                      _M1 \= _M2,
+                      X \= Y.
 
-uncle(X, Y) :-
-    parent(P, Y),
-    siblings(P, X).
-
+halfSiblings(X, Y) :- mother(_M, X), mother(_M, Y),
+                      father(_F1, X), father(_F2, Y),
+                      _F1 \= _F2,
+                      X \= Y.
