@@ -134,3 +134,15 @@ halfSiblings(X, Y) :- mother(_M, X), mother(_M, Y),
                       father(_F1, X), father(_F2, Y),
                       _F1 \= _F2,
                       X \= Y.
+
+cousins(X, Y) :- parent(_Z1, X),
+                 parent(_Z2, Y),
+                 siblings(_Z1, _Z2).
+
+uncle(X, Y) :- parent(_K, Y),
+               siblings(X, _K),
+               male(X).
+
+aunt(X, Y) :- parent(_K, Y),
+               siblings(X, _K),
+               female(X).
