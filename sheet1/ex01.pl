@@ -113,11 +113,11 @@ father(X, Y) :- parent(X, Y),
 mother(X, Y) :- parent(X, Y),
                 female(X).
 
-grandparent(X, Y) :- father(X, _K),
-                     parent(_K, Y).
+grandparent(X, Y) :- father(X, _P),
+                     parent(_P, Y).
 
-grandmother(X, Y) :- mother(X, _K),
-                     parent(_K, Y).
+grandmother(X, Y) :- mother(X, _P),
+                     parent(_P, Y).
 
 siblings(X, Y) :- father(_F, X),
                   father(_F, Y),
@@ -130,19 +130,12 @@ halfSiblings(X, Y) :- father(_F, X), father(_F, Y),
                       _M1 \= _M2,
                       X \= Y.
 
-halfSiblings(X, Y) :- mother(_M, X), mother(_M, Y),
-                      father(_F1, X), father(_F2, Y),
-                      _F1 \= _F2,
-                      X \= Y.
+cousins(X, Y) :- parent(_P1, X),
+                 parent(_P2, Y),
+                 siblings(_P1, _P2).
 
-cousins(X, Y) :- parent(_Z1, X),
-                 parent(_Z2, Y),
-                 siblings(_Z1, _Z2).
+uncle(X, Y) :- father(_P, Y),
+               siblings(_P, X).
 
-uncle(X, Y) :- parent(_K, Y),
-               siblings(X, _K),
-               male(X).
-
-aunt(X, Y) :- parent(_K, Y),
-               siblings(X, _K),
-               female(X).
+aunt(X, Y) :- mother(_M, Y),
+              siblings(_M, X).
