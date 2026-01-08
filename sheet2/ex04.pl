@@ -25,25 +25,24 @@ pow_rec(X, Y, P) :- Y > 0,
 % d) Implement the square_rec(+N, -S) predicate, which recursively determines que square of a number N (ie, without using multiplications).
 % Suggestion: you may need to use an auxiliary predicate with additional arguments.
 
-aux_s(_, 0, 0).
-aux_s(X, C, S) :- C > 0,
-                C1 is C - 1,
-                aux(X, C1, S1),
-                S is S1 + X.
+aux_s(_, 0, 1).
+aux_s(N, C, S) :- C > 0,
+                  C1 is C - 1,
+                  aux_s(N, C1, S1),
+                  S is S1 + N.
 
 square_rec(N, S) :- aux_s(N, N, S).
 
 % e) Implement the fibonacci(+N, -F) predicate, which determines the Fibonacci number of order N.
 
-fib(0, 0).
-fib(1, 1).
-fib(2, 1).
-fib(N, S) :- N > 2,
-             N1 is N - 1,
-             N2 is N - 2,
-             fib(N1, S1),
-             fib(N2, S2),
-             S is S1 + S2.
+fibonacci(0, 0).
+fibonacci(1, 1).
+fibonacci(N, F) :- N > 1,
+                   N1 is N - 1,
+                   N2 is N - 1,
+                   fibonacci(N1, F1),
+                   fibonacci(N2, F2),
+                   F is F1 + F2.
 
 % f) Implement collatz(+N, -S), which receives a positive integer number N and determines the number of steps necessary to reach 1 following the operations set forth by this sequence: if N is even, in the next step it will take the value N/2; if N is odd, in the next step it will take the value 3N+1.
 
@@ -71,5 +70,3 @@ aux_p(N, I) :- I > 0,
 is_prime(2).
 is_prime(X) :- X > 1,
                aux_p(X, 2).
-               
-
