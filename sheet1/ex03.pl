@@ -34,15 +34,13 @@ gates(istanbul, 9).
 gates(budapest, 6).
 gates(porto, 5).
 
-team_winned(T, C) :- team(D, T), winned(D, C).
-
-/* b) Write the following questions in Prolog:b) Write the following questions in Prolog: */
+/* b) Write the following questions in Prolog: */
 
 % Who won the race in Porto?
 % winned(X, porto).
 
 % What team won the race in Porto?
-% winned(_X, porto), team(_X, Y).
+% winned(_P, porto), team(_P, X).
 
 % Which circuits have nine gates?
 % gates(X, 9).
@@ -51,5 +49,4 @@ team_winned(T, C) :- team(D, T), winned(D, C).
 % drives(X, _C), _C \= edge540.
 
 % Which pilots have won more than one circuit?
-winned(X, _C1), winned(X, _C2), _C1 \= _C2.
-% winned(_D, porto), drives(_D, P).
+% winned(X, _C1), winned(X, _C2), _C1 \= _C2.
