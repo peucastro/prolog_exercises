@@ -37,3 +37,16 @@ del_dups_aux([X | Xs], Acc, [X | List2]) :- \+ memberchk(X, Acc),
                                             del_dups_aux(Xs, [X | Acc], List2).
 
 del_dups(List1, List2) :- del_dups_aux(List1, [], List2).
+
+/* g) Implement replicate(+Amount, +Elem, ?List) which generates a list with Amount repetitions of Elem. */
+
+replicate(0, _, []).
+replicate(Amount, Elem, [Elem | List]) :- Amount > 0,
+                                          Amount1 is Amount - 1,
+                                          replicate(Amount1, Elem, List).
+
+/* h) Implement intersperse(+Elem, +List1, ?List2), which intersperses Elem between the elements of List1, resulting in List2. */
+
+intersperse(_, [], []).
+intersperse(_, [X], [X]) :- !.
+intersperse(Elem, [X | Xs], [X | [Elem | List2]]) :- intersperse(Elem, Xs, List2).
