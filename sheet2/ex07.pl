@@ -63,3 +63,37 @@ ancestor_of(X, Y) :- parent(X, Z),
 descendant_of(X, Y) :- parent(Y, X).
 descendant_of(X, Y) :- parent(Z, X),
                        descendant_of(Z, Y).
+/*
+i. Who is Gloria's descendant, but not Jay's?
+
+| ?- descendant_of(X, gloria), -+ descendant_of(X, jay).
+X = manny ? ;
+no
+*/
+
+/*
+ii. What ancestors do Haley and Lily have in common?
+
+| ?- ancestor_of(X, haley), ancestor_of(X, lily).
+X = dede ? ;
+X = jay ? ;
+no
+*/
+
+born(jay, 1946-5-23).
+born(claire, 1970-11-13).
+born(mitchell, 1973-7-10).
+
+before(Y1-_-_, Y2-_-_) :- Y1 < Y2.
+before(Y-M1-_, Y-M2-_) :- M1 < M2.
+before(Y-M-D1, Y-M-D2) :- D1 < D2.
+
+older(X, Y, X) :- born(X, _BX),
+                  born(Y, _BY),
+                  before(_BX, _BY).
+older(X, Y, Y) :- born(X, _BX),
+                  born(Y, _BY),
+                  before(_BY, _BX).
+
+oldest(X) :- born(X, _BX),
+             \+ (born(Y, _BY), before(_BY, _BX)).
