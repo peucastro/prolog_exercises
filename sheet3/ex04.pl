@@ -15,3 +15,26 @@ list_last(List, Last) :- append(_, [Last], List).
 
 list_nth(N, List, Elem) :- append(Prefix, [Elem | _], List),
                            length(Prefix, N).
+
+/* e) Implement list_append(+ListOfLists, ?List), which appends a list of lists. */
+
+list_append_aux([], Acc, Acc).
+list_append_aux([Xs | Xss], Acc, List) :- append(Acc, Xs, Acc1),
+                                          list_append_aux(Xss, Acc1, List).
+
+list_append(ListOfLists, List) :- list_append_aux(ListOfLists, [], List).
+
+/* f) Implement list_del(+List, +Elem, ?Res), which eliminates an occurrence of Elem from List, unifying the result with Res, using only the append predicate twice. */
+
+list_del(List, Elem, Res) :- append(Prefix, [Elem | Suffix], List),
+                             append(Prefix, Suffix, Res).
+
+/* g) Implement list_before(?First, ?Second, ?List), which succeeds if the first two arguments are members of List, and First occurs before Second, using only the append predicate twice. */
+
+list_before(First, Second, List) :- append(_, [First | Rest], List),
+                                    append(_, [Second | _], Rest).
+
+/* h) Implement list_replace_one(+X, +Y, +List1, ?List2), which replaces one occurrence of X in List1 by Y, resulting in List2, using only the append predicate twice. */
+
+list_replace_one(X, Y, List1, List2) :- append(Prefix, [X | Rest], List1),
+                                        append(Prefix, [Y | Rest], List2).
