@@ -38,3 +38,25 @@ list_before(First, Second, List) :- append(_, [First | Rest], List),
 
 list_replace_one(X, Y, List1, List2) :- append(Prefix, [X | Rest], List1),
                                         append(Prefix, [Y | Rest], List2).
+
+/* i) Implement list_repeated(+X, +List), which succeeds if X occurs repeatedly (at least twice) in List, using only the append predicate twice. */
+
+list_repeated(X, List) :- append(_, [X | Rest], List),
+                          append(_, [X | _], Rest).
+
+/* j) Implement list_slice(+List1, +Index, +Size, ?List2), which extracts a slide of size Size from List1 starting at index Index, resulting in List2, using only the append and length predicates. */
+
+list_slice(List, Index, Size, List2) :- append(Prefix, Suffix, List),
+                                        length(Prefix, Index),
+                                        append(List2, _, Suffix),
+                                        length(List2, Size).
+
+/*
+k) Implement list_shift_rotate(+List1, +N, ?List2), which rotates List1 by N elements to the left, resulting in List2, using only the append and length predicates.
+E.g.: | ?- list_shift_rotate([a, b, c, d, e, f], 2, L).
+      L = [c, d, e, f, a, b]
+*/
+
+list_shift_rotate(List1, N, List2) :- length(Prefix, N),
+                                      append(Prefix, Suffix, List1),
+                                      append(Suffix, Prefix, List2).
