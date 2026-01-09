@@ -50,3 +50,25 @@ replicate(Amount, Elem, [Elem | List]) :- Amount > 0,
 intersperse(_, [], []).
 intersperse(_, [X], [X]) :- !.
 intersperse(Elem, [X | Xs], [X | [Elem | List2]]) :- intersperse(Elem, Xs, List2).
+
+/* i) Implement insert_elem(+Index, +List1, +Elem, ?List2), which inserts Elem into List1 at position Index, resulting in List2. */
+
+insert_elem(0, [], X, [X]).
+insert_elem(0, List1, Elem, [Elem | List1]).
+insert_elem(Index, [X | Xs], Elem, [X | List2]) :- Index > 0,
+                                                   Index1 is Index - 1,
+                                                   insert_elem(Index1, Xs, Elem, List2).
+
+/* j) Implement delete_elem(+Index, +List1, ?Elem, ?List2), which removes the element at position Index from List1 (which is unified with Elem), resulting in List2. */
+
+delete_elem(0, [X | Xs], X, Xs).
+delete_elem(Index, [X | Xs], Elem, [X | List2]) :- Index > 0,
+                                             Index1 is Index - 1,
+                                             delete_elem(Index1, Xs, Elem, List2).
+
+/* k) Implement replace(+List1, +Index, ?Old, +New, ?List2), which replaces the Old element, located at position Index in List1, by New, resulting in List2. */
+
+replace([X | Xs], 0, X, New, [New | Xs]).
+replace([X | Xs], Index, Old, New, [X | List2]) :- Index > 0,
+                                                   Index1 is Index - 1,
+                                                   replace(Xs, Index1, Old, New, List2).
