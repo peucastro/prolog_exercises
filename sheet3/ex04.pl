@@ -18,11 +18,9 @@ list_nth(N, List, Elem) :- append(Prefix, [Elem | _], List),
 
 /* e) Implement list_append(+ListOfLists, ?List), which appends a list of lists. */
 
-list_append_aux([], Acc, Acc).
-list_append_aux([Xs | Xss], Acc, List) :- append(Acc, Xs, Acc1),
-                                          list_append_aux(Xss, Acc1, List).
-
-list_append(ListOfLists, List) :- list_append_aux(ListOfLists, [], List).
+list_append([], []).
+list_append([[] | ListOfLists], List) :- list_append(ListOfLists, List).
+list_append([[X | Xs] | ListOfLists], [X | List]) :- list_append([Xs | ListOfLists], List).
 
 /* f) Implement list_del(+List, +Elem, ?Res), which eliminates an occurrence of Elem from List, unifying the result with Res, using only the append predicate twice. */
 
@@ -31,18 +29,18 @@ list_del(List, Elem, Res) :- append(Prefix, [Elem | Suffix], List),
 
 /* g) Implement list_before(?First, ?Second, ?List), which succeeds if the first two arguments are members of List, and First occurs before Second, using only the append predicate twice. */
 
-list_before(First, Second, List) :- append(_, [First | Rest], List),
-                                    append(_, [Second | _], Rest).
+list_before(First, Second, List) :- append(_, [First | Suffix], List),
+                                    append(_, [Second | _], Suffix).
 
 /* h) Implement list_replace_one(+X, +Y, +List1, ?List2), which replaces one occurrence of X in List1 by Y, resulting in List2, using only the append predicate twice. */
 
-list_replace_one(X, Y, List1, List2) :- append(Prefix, [X | Rest], List1),
-                                        append(Prefix, [Y | Rest], List2).
+list_replace_one(X, Y, List1, List2) :- append(Prefix, [X | Suffix], List1),
+                                        append(Prefix, [Y | Suffix], List2).
 
 /* i) Implement list_repeated(+X, +List), which succeeds if X occurs repeatedly (at least twice) in List, using only the append predicate twice. */
 
-list_repeated(X, List) :- append(_, [X | Rest], List),
-                          append(_, [X | _], Rest).
+list_repeated(X, List) :- append(_, [X | Suffix], List),
+                          append(_, [X | _], Suffix).
 
 /* j) Implement list_slice(+List1, +Index, +Size, ?List2), which extracts a slide of size Size from List1 starting at index Index, resulting in List2, using only the append and length predicates. */
 
