@@ -55,3 +55,29 @@ teachers_of(S, T) :- setof(Teacher, Subject^(attends(S, Subject), teaches(Teache
 /* e) Implement common_courses(+S1, +S2, -C), which returns a list of all courses attended by both student S1 and S2. */
 
 common_courses(S1, S2, C) :- setof(Course, (attends(S1, Course), attends(S2, Course)), C).
+
+/* f) Implement more_than_one_course(-L), which returns a list of all students attending more than one course. Note: avoid duplicate elements. */
+
+more_than_one_course(L) :- setof(Student, C1^C2^(attends(Student, C1), attends(Student, C2), C1 \= C2), L).
+
+/* g) Implement strangers(-L), which returns a list with all pairs of students who don't know each other, i.e., don't attend any course in common. */
+
+strangers(L) :-
+    setof(S1-S2,
+          C1^C2^C^(
+            attends(S1, C1), attends(S2, C2),
+            S1 @< S2,
+            \+ (attends(S1, C), attends(S2, C))
+          ),
+          L).
+
+/* h) Implement good_groups(-L), which returns a list with all the students who attend more than one course in common. */
+
+good_groups(L) :-
+    setof(S1-S2,
+          C1^C2^(
+              attends(S1, C1), attends(S2, C1),
+              attends(S1, C2), attends(S2, C2),
+              C1 @< C2, S1 @< S2
+          ),
+          L).
