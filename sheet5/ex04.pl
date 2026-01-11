@@ -55,3 +55,35 @@ find_flights_aux(Origin, Destination, Visited, [Code | Tail]) :- flight(Origin, 
 
 find_flights(Origin, Destination, Flights) :- find_flights_aux(Origin, Destination, [Origin], Flights).
 
+/* e) Implement find_all_flights (+Origin, +Destination, -ListOfFlights), which returns in ListOfFlights a list of all the possible ways to connect Origin to Destination (each represented as a list of flight codes). */
+
+find_all_flights(Origin, Destination, ListOfFlights) :- setof(Flights, (find_flights(Origin, Destination, Flights)), ListOfFlights).
+
+/* f) Implement find_flights_least_stops(+Origin, +Destination, -ListOfFlights), which returns in ListOfFlights a list of all possible ways to connect Origin to Destination
+(each represented as a list of flight codes) with a minimum number of stops, i.e. a list of the shortest paths between Origin and Destination. */
+
+find_all_flights_with_stops(Origin, Destination, ListWithStops) :- findall(Stops-Flights, (
+                                                                          find_flights(Origin, Destination, Flights),
+                                                                          length(Flights, L),
+                                                                          Stops is L - 1
+                                                                          ), UnsortedListWithStops),
+                                                                   sort(UnsortedListWithStops, ListWithStops).
+
+find_flights_least_stops(Origin, Destination, LeastStopsFlights) :- find_all_flights_with_stops(Origin, Destination, ListWithStops),
+                                                                    ListWithStops = [MinStops-_ | _],
+                                                                    findall(F, member(MinStops-F, ListWithStops), LeastStopsFlights).
+
+/* h) Implement find_circular_trip (+MaxSize, +Origin, -Cycle), which returns in Cycle a list, of maximum length MaxSize, with flights that start and end in Origin, forming a cycle. */
+
+find_circular_trip(MaxSize, Origin, ListOfCycles) :-
+    findall(
+        OneCycle,
+        (
+            flight(Origin, Neighbour, _, FirstCode, _, _),
+            find_flights(Neighbour, Origin, Rest),
+            OneCycle = [FirstCode | Rest],
+            length(OneCycle, L),
+            L =< MaxSize
+        ),
+        AllCycles),
+    sort(AllCycles, ListOfCycles).
