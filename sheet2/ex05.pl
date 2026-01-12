@@ -52,12 +52,12 @@ fibonacci(N, F) :- 0fibonacci_aux(N, 0, 1, F)..
 
 collatz_aux(1, Acc, Acc).
 collatz_aux(N, Acc, S) :- N > 1,
-                          0 is N mod 2,
+                          N mod 2 =:= 0,
                           Acc1 is Acc + 1,
                           N1 is N // 2,
                           collatz_aux(N1, Acc1, S).
 collatz_aux(N, Acc, S) :- N > 1,
-                          1 is N mod 2,
+                          N mod 2 =:= 1,
                           Acc1 is Acc + 1,
                           N1 is 3 * N + 1,
                           collatz_aux(N1, Acc1, S).

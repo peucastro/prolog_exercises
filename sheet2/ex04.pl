@@ -48,12 +48,12 @@ fibonacci(N, F) :- N > 1,
 
 collatz(1, 0).
 collatz(N, S) :- N > 1,
-                 0 is N mod 2,
+                 N mod 2 =:= 0,
                  N1 is N // 2,
                  collatz(N1, S1),
                  S is S1 + 1.
 collatz(N, S) :- N > 1,
-                 1 is N mod 2,
+                 N mod 2 =:= 1,
                  N1 is 3 * N + 1,
                  collatz(N1, S1),
                  S is S1 + 1.
