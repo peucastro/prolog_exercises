@@ -1142,7 +1142,7 @@
         % has_2plus_children(?P): P has at least two children.
         has_2plus_children(P):- parent(P,C1), parent(P,C2), C1 @< C2, \+((parent(P,C3), C3 \= C1, C3 @< C2)).
 
-    e) What predicates would you use to represent information regarding marriages and divorces? How would you represent Jay and Gloria's marriage in 2008, or Jay and Dede's marriage in 1968 and respective divorce in 2003?
+    e) What predicates would you use to represent information regarding marriages and divorces? How would you represent Jay and Glorias marriage in 2008, or Jay and Dedes marriage in 1968 and respective divorce in 2003?
         % married(Husband,Wife,Year).
         married(jay,gloria,2008).
         married(jay,dede,1968).
@@ -1190,7 +1190,35 @@
             attends(B, X),
             A \= B.
 
-    -----  3.- 4.- 5.-  ----- % same thing, faço se tiver tempo/espaço
+    -----  3.- Red Bull Air Race  -----
+    % i. Who won the race in Porto?
+    winned(X, porto).
+
+    % ii. What team won the race in Porto?
+    winned(_P, porto), team(_P, X).
+
+    % iii. Which circuits have nine gates?
+    gates(X, 9).
+
+    % iv. Which pilots do not fly an Edge540?
+    drives(X, _C), _C \= edge540.
+
+    % v. Which pilots have won more than one circuit?
+    winned(X, _C1), winned(X, _C2), _C1 \= _C2.
+
+    -----  5.- Jobs and Bosses  -----
+    % i. Is X a direct supervisor of Y?
+    supervises(X, Y) :- job(_R1, X), job(_R2, Y), supervised_by(_R2, _R1).
+
+    % ii. Are X and Y supervised by people with the same job?
+    same_supervisor_job(X, Y) :- job(_JX, X), job(_JY, Y), supervised_by(_JX, R), supervised_by(_JY, R), X \= Y.
+
+    % iii. Is X responsible for supervising more than one job?
+    supervises_more_than_one_job(X) :- job(_J, X), supervised_by(_R1, _J), supervised_by(_R2, _J), _R1 \= _R2.
+
+    % iv. Is X a supervisor of Ys supervisor?
+    supervises_supervisor(X, Y) :- job(_J1, X), job(_J2, Y), supervised_by(_J2, _S), supervised_by(_S, _J1), _J1 \= _J2.
+
 
 }
 
@@ -1365,9 +1393,6 @@
             older(X, Y, Y) :- born(X, DX), born(Y, DY), before(DY, DX).
         iii) oldest(?X)
             oldest(X) :- born(X, DX), \+ (born(Y, DY), before(DY, DX)).
-
-    -----  8.-9.-  ----- se tiver tempo (e espaço) faço da outra e desta
-
 }
 
 -----  PRATICAL CLASS 3 - Lists  ----- {
@@ -1398,25 +1423,125 @@
     l) | ?- [One, Two | Tail] = [leic | Rest].
         One = leic, Rest = [Two | Tail]
 
+    -----  2.- Recursion Over Lists  -----
+    % a) Implement list_size(+List, ?Size), which determines the size of List.
+    list_size_aux([], Acc, Acc).
+    list_size_aux([_ | T], Acc, Size) :- Acc1 is Acc + 1, list_size_aux(T, Acc1, Size).
 
+    list_size(List, Size) :- list_size_aux(List, 0, Size).
 
-}
+    % b) Implement list_sum(+List, ?Sum), which sums the values contained in List (assumed to be a proper list of numbers).
+    list_sum_aux([], Acc, Acc).
+    list_sum_aux([X | Xs], Acc, Sum) :- Acc1 is Acc + X, list_sum_aux(Xs, Acc1, Sum).
 
------  PRATICAL CLASS 4 - Cut and I/O  ----- {
+    list_sum(List, Sum) :- list_sum_aux(List, 0, Sum).
 
-    -----  1.- How the Cut works  -----
+    % c) Implement list_prod(+List, ?Prod), which multiplies the values in List (assumed to be a proper list of numbers).
+    list_prod_aux([], Acc, Acc).
+    list_prod_aux([X | Xs], Acc, Prod) :- Acc1 is Acc * X, list_prod_aux(Xs, Acc1, Prod).
 
-}
+    list_prod([X | Xs], Prod) :- list_prod_aux(Xs, X, Prod).
 
------  PRATICAL CLASS 5 - Graphs and Search  ----- {
+    % d) Implement inner_product(+List1, +List2, ?Result), which determines the inner product of two vectors (represented as lists of integers, of the same size).
+    inner_product_aux([], [], Acc, Acc).
+    inner_product_aux([X | Xs], [Y | Ys], Acc, Result) :- Acc1 is Acc + X * Y, inner_product_aux(Xs, Ys, Acc1, Result).
 
-    -----  1.- Family Relations Reloaded  -----
+    inner_product(List1, List2, Result) :- inner_product_aux(List1, List2, 0, Result).
 
-}
+    % e) Implement count(+Elem, +List, ?N), which counts the number of occurrences (N) of Elem within List.
+    count_aux(_, [], Acc, Acc).
+    count_aux(Elem, [X | Xs], Acc, N) :- X == Elem, Acc1 is Acc + 1, count_aux(Elem, Xs, Acc1, N).
+    count_aux(Elem, [X | Xs], Acc, N) :- X \== Elem, count_aux(Elem, Xs, Acc, N).
 
------  PRATICAL CLASS 6 - Meta Programming and Operators  ----- {
+    count(Elem, List, N) :- count_aux(Elem, List, 0, N).
 
-    -----  1.- Higher-Order Predicates  -----
+    -----  3.- List Manipulation  -----
+    % a) Implement invert(+List1, ?List2), which inverts list List1.
+    invert_aux([], Acc, Acc).
+    invert_aux([X | Xs], Acc, List2) :- invert_aux(Xs, [X | Acc], List2).
+
+    invert(List1, List2) :- invert_aux(List1, [], List2).
+
+    % b) Implement del_one(+Elem, +List1, ?List2), which deletes the first occurrence of Elem from List1, resulting in List2.
+    del_one(_, [], []).
+    del_one(Elem, [Elem | Xs], Xs).
+    del_one(Elem, [X | Xs], [X | List2]) :- X \= Elem, del_one(Elem, Xs, List2).
+
+    % c) Implement del_all(+Elem, +List1, ?List2), which deletes all occurrences of Elem from List1, resulting in List2.
+    del_all(_, [], []).
+    del_all(Elem, [Elem | Xs], List2) :- del_all(Elem, Xs, List2).
+    del_all(Elem, [X | Xs], [X | List2]) :- X \== Elem, del_all(Elem, Xs, List2).
+
+    % d) Implement del_all_list(+ListElems, +List1, ?List2), which deletes from List1 all occurrences of all elements of ListElems, resulting in List2.
+    del_all_list([], List1, List1).
+    del_all_list([Target | ListElems], List1, List2) :- del_all(Target, List1, TempList), del_all_list(ListElems, TempList, List2).
+
+    % e) Implement del_dups(+List1, ?List2), which eliminates repeated values from List1.
+    del_dups_aux([], _, []).
+    del_dups_aux([X | Xs], Acc, List2) :- memberchk(X, Acc), del_dups_aux(Xs, Acc, List2).
+    del_dups_aux([X | Xs], Acc, [X | List2]) :- \+ memberchk(X, Acc), del_dups_aux(Xs, [X | Acc], List2).
+
+    del_dups(List1, List2) :- del_dups_aux(List1, [], List2).
+
+    % g) Implement replicate(+Amount, +Elem, ?List) which generates a list with Amount repetitions of Elem.
+    replicate(0, _, []).
+    replicate(Amount, Elem, [Elem | List]) :- Amount > 0, Amount1 is Amount - 1, replicate(Amount1, Elem, List).
+
+    % h) Implement intersperse(+Elem, +List1, ?List2), which intersperses Elem between the elements of List1, resulting in List2.
+    intersperse(_, [], []).
+    intersperse(_, [X], [X]) :- !.
+    intersperse(Elem, [X | Xs], [X, Elem | List2]) :- intersperse(Elem, Xs, List2).
+
+    % i) Implement insert_elem(+Index, +List1, +Elem, ?List2), which inserts Elem into List1 at position Index, resulting in List2.
+    insert_elem(0, [], X, [X]).
+    insert_elem(0, List1, Elem, [Elem | List1]).
+    insert_elem(Index, [X | Xs], Elem, [X | List2]) :- Index > 0, Index1 is Index - 1, insert_elem(Index1, Xs, Elem, List2).
+
+    % j) Implement delete_elem(+Index, +List1, ?Elem, ?List2), which removes the element at position Index from List1 (which is unified with Elem), resulting in List2.
+    delete_elem(0, [X | Xs], X, Xs).
+    delete_elem(Index, [X | Xs], Elem, [X | List2]) :- Index > 0, Index1 is Index - 1, delete_elem(Index1, Xs, Elem, List2).
+
+    % k) Implement replace(+List1, +Index, ?Old, +New, ?List2), which replaces the Old element, located at position Index in List1, by New, resulting in List2.
+    replace([X | Xs], 0, X, New, [New | Xs]).
+    replace([X | Xs], Index, Old, New, [X | List2]) :- Index > 0, Index1 is Index - 1, replace(Xs, Index1, Old, New, List2).
+
+    -----  4.- Append, The Powerful  -----
+    % a) Implement list_append(?L1, ?L2, ?L3), where L3 is the concatenation of lists L1 and L2.
+    list_append([], L2, L2).
+    list_append([X | Xs], L2, [X | L3]) :- list_append(Xs, L2, L3).
+
+    % b) Implement list_member(?Elem, ?List), which verifies if Elem is a member of List, using solely the append predicate exactly once.
+    list_member(Elem, List) :- append(_, [Elem | _], List).
+
+    % c) Implement list_last(+List, ?Last), which unifies Last with the last element of List, using solely the append predicate exactly once.
+    list_last(List, Last) :- append(_, [Last], List).
+
+    % d) Implement list_nth(?N, ?List, ?Elem), which unifies Elem with the Nth element of List, using only the append and length predicates.
+    list_nth(N, List, Elem) :- append(Prefix, [Elem | _], List), length(Prefix, N).
+
+    % e) Implement list_append(+ListOfLists, ?List), which appends a list of lists.
+    list_append([], []).
+    list_append([[] | ListOfLists], List) :- list_append(ListOfLists, List).
+    list_append([[X | Xs] | ListOfLists], [X | List]) :- list_append([Xs | ListOfLists], List).
+
+    % f) Implement list_del(+List, +Elem, ?Res), which eliminates an occurrence of Elem from List, unifying the result with Res, using only the append predicate twice.
+    list_del(List, Elem, Res) :- append(Prefix, [Elem | Suffix], List), append(Prefix, Suffix, Res).
+
+    % g) Implement list_before(?First, ?Second, ?List), which succeeds if the first two arguments are members of List, and First occurs before Second, using only the append predicate twice.
+    list_before(First, Second, List) :- append(_, [First | Suffix], List), append(_, [Second | _], Suffix).
+
+    % h) Implement list_replace_one(+X, +Y, +List1, ?List2), which replaces one occurrence of X in List1 by Y, resulting in List2, using only the append predicate twice.
+    list_replace_one(X, Y, List1, List2) :- append(Prefix, [X | Suffix], List1), append(Prefix, [Y | Suffix], List2).
+
+    % i) Implement list_repeated(+X, +List), which succeeds if X occurs repeatedly (at least twice) in List, using only the append predicate twice.
+    list_repeated(X, List) :- append(_, [X | Suffix], List), append(_, [X | _], Suffix).
+
+    % j) Implement list_slice(+List1, +Index, +Size, ?List2), which extracts a slide of size Size from List1 starting at index Index, resulting in List2, using only the append and length predicates.
+    list_slice(List, Index, Size, List2) :- append(Prefix, Suffix, List), length(Prefix, Index), append(List2, _, Suffix), length(List2, Size).
+
+    % k) Implement list_shift_rotate(+List1, +N, ?List2), which rotates List1 by N elements to the left, resulting in List2, using only the append and length predicates.
+
+    list_shift_rotate(List1, N, List2) :- length(Prefix, N), append(Prefix, Suffix, List1), append(Suffix, Prefix, List2).
 
 }
 
