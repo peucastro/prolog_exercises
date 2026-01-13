@@ -47,33 +47,33 @@
 
     -----  Terms  -----
     Everything in Prolog is a term, which can be
-            • Constant
-            • Variable
-            • Compound term
+        • Constant
+        • Variable
+        • Compound term
 
     -----  Constants  -----
     Constants represent elementary objects
 
     Numbers
-            • Integers (e.g., 4, -8) (bases other than decimal can also be used, e.g., 8 755)
-            • Floats (e.g., 1.5, -1.6) (also supports exponent, e.g., 23.4E-2)
+        • Integers (e.g., 4, -8) (bases other than decimal can also be used, e.g., 8 755)
+        • Floats (e.g., 1.5, -1.6) (also supports exponent, e.g., 23.4E-2)
 
     Atoms
-            • Start with lower-case letter (e.g., john_doe, johnSmith42)
-            • String within single quotes (e.g., "John Doe", "John Smith 42")
+        • Start with lower-case letter (e.g., john_doe, johnSmith42)
+        • String within single quotes (e.g., 'John Doe', 'John Smith 42')
 
     -----  Variables  -----
     Variables act as placeholders for arbitrary terms
-            • Start with a capital letter (e.g., Variable1)
-            • Start with an underscore (e.g., _Var2)
-            • Single underscore (_) (anonymous variable)
+        • Start with a capital letter (e.g., Variable1)
+        • Start with an underscore (e.g., _Var2)
+        • Single underscore (_) (anonymous variable)
 
     Variables are universally instantiated in logic programs
-            plus(0, S, S).          % 0 is the neutral element of addition
-            mult(1, V, V).          % 1 is the neutral element of multiplication
-            human(Homer).           % everything is human
-            father(homer, Bart)     % homer is the father of everything
-            grandfather(X, Y):- father(X, Z), parent(Z, Y).
+        plus(0, S, S).          % 0 is the neutral element of addition
+        mult(1, V, V).          % 1 is the neutral element of multiplication
+        human(Homer).           % everything is human
+        father(homer, Bart)     % homer is the father of everything
+        grandfather(X, Y):- father(X, Z), parent(Z, Y).
 
     Variables occurring only in the body of a rule can be seen as existentially quantified. We need to be careful when using variables with facts.
 
@@ -91,60 +91,60 @@
         No
 
     The attempt to prove the question right/wrong (is it a consequence of the program?) produces the computations
-            | ?- male(homer).               yes
-            | ?- father(homer, bart).       yes
-            | ?- female(marge).             yes
-            | ?- father(marge, bart).       no
+        | ?- male(homer).               yes
+        | ?- father(homer, bart).       yes
+        | ?- female(marge).             yes
+        | ?- father(marge, bart).       no
 
     ----- Variables in Queries -----
     Queries can include variables - Variables are existentially quantified in queries. A variable starting with an underscore is a "don't care"
-            | ?- father(X, bart).           X = homer ?
-                                            yes
-            | ?- father(_X, bart).          yes
-            | ?- male(_).                   yes
-            | ?- male(X).                   X = homer ?
-                                            yes
-            | ?- male(X).                   X = homer ? ;
-                                            X = bart ? n
-                                            no
+        | ?- father(X, bart).           X = homer ?
+                                        yes
+        | ?- father(_X, bart).          yes
+        | ?- male(_).                   yes
+        | ?- male(X).                   X = homer ?
+                                        yes
+        | ?- male(X).                   X = homer ? ;
+                                        X = bart ? n
+                                        no
     If satisfied with the answer, just hit enter .If you want another answer, type "n", "no" or ";"
 
     ----- Variables and Compound Queries -----
     Queries can be more complex, combining goals. Variables are used to glue together the different goals - Underscore alone (_) is the exception
-            | ?- male(X), parent(X, bart).          X = homer ? ;
-                                                    no
-            | ?- male(_X), parent(_X, bart).        yes
-            | ?- male(_X), parent(Y, bart).         Y = homer ? ;
-                                                    Y = marge ? ;
-                                                    Y = homer ? ;
-                                                    Y = marge ? ;
-                                                    no
+        | ?- male(X), parent(X, bart).          X = homer ? ;
+                                                no
+        | ?- male(_X), parent(_X, bart).        yes
+        | ?- male(_X), parent(Y, bart).         Y = homer ? ;
+                                                Y = marge ? ;
+                                                Y = homer ? ;
+                                                Y = marge ? ;
+                                                no
 
     ----- Closed Word Assumption -----
     Assumption that everything that is true is known to be true (i.e., is represented as a clause in the program). Therefore, everything that cannot be deduced from the clauses in the program is assumed to be false.
-            | ?- male(donald).      no
+        | ?- male(donald).      no
     Requires attention to make sure everything we want to deduce can be deduced from the program clauses
 
     ----- Horn Clauses -----
     Everything in Prolog is expressed as a Horn Clause
-            Rules are complete horn clauses (head :- body)
-            male(homer):- true.     <=>     male(homer).
+        Rules are complete horn clauses (head :- body)
+        male(homer):- true.     <=>     male(homer).
 
     Facts are horn clauses where the body is always true (just the head)
-            parent(X, Y):- father(X, Y).        <=>     father(X, Y) => parent(X, Y)
+        parent(X, Y):- father(X, Y).        <=>     father(X, Y) => parent(X, Y)
 
     Queries are horn clauses without a head (just the body)
-            | ?- father(X, bart).
+        | ?- father(X, bart).
 
     ----- Predicates -----
     A predicate is a set of clauses for the same functor
         Clauses are either facts or rules - parent is a predicate with two clauses:
-                parent(marge, bart).
-                parent(homer, bart).
+            parent(marge, bart).
+            parent(homer, bart).
 
     Functors with the same name but different arity refer to different predicates
-                father(X):- father(X, Y).       % X is a father
-                                                % if X is the father of some Y
+        father(X):- father(X, Y).       % X is a father
+                                        % if X is the father of some Y
 
     ----- How Prolog Works -----
         Top to bottom - The order of clauses is important
@@ -157,71 +157,71 @@
 
     ----- Substitution -----
     Recall everything in Prolog is a term. Terms can be either:
-            • Ground - there are no variables in the term (completely instantiated)
-            • Unground - there are variables in the term
+        • Ground - there are no variables in the term (completely instantiated)
+        • Unground - there are variables in the term
 
     Unification is how Prolog matches two terms. Two terms are unifiable if
-            • they are the same, or
-            • they can be the same after variable substitution
+        • they are the same, or
+        • they can be the same after variable substitution
 
     A substitution 𝜃 is a set of pairs Xi = ti where
-            • Xi is a variable
-            • ti is a term
-            • Xi ≠ Xj for all i ≠ j
-            • Xi does not occur in any tj, for all i and j
+        • Xi is a variable
+        • ti is a term
+        • Xi ≠ Xj for all i ≠ j
+        • Xi does not occur in any tj, for all i and j
 
     To apply a substitution 𝜃 to a term T (T𝜃) is to replace in T all occurrences of Xi for ti, for all pairs Xi=ti in 𝜃
-            T = father(X, bart)
-            𝜃 = {X=homer}
-            T𝜃 = father(homer, bart)
+        T = father(X, bart)
+        𝜃 = {X=homer}
+        T𝜃 = father(homer, bart)
 
     A is said to be an instance of B if there is a substitution 𝜃 such that A = B𝜃
-            father(homer, bart) is an instance of father(X, bart)
+        father(homer, bart) is an instance of father(X, bart)
 
     A term T is a common instance of T1 and T2 if there are substitutions 𝜃1 and 𝜃2 such that T = T1𝜃1 and T = T2𝜃2
-            parent(homer, bart) is a common instance of parent(X, bart) and parent(homer, Y)
+        parent(homer, bart) is a common instance of parent(X, bart) and parent(homer, Y)
 
 
     A term G is more general than term T if T is an instance of G but G is not an instance of T
-            parent(X, bart) is more general than parent(homer, bart)
+        parent(X, bart) is more general than parent(homer, bart)
 
     A term V is a variant of a term T if they can be converted into one another by a simple variable renaming
-            parent(Y, bart) is a variant of parent(X, bart)
+        parent(Y, bart) is a variant of parent(X, bart)
 
     ----- Unification -----
     Given two atomic sentences, p and _q, a unification algorithm returns a substitution 𝜃 (the most general unifier) that makes them identical (or fails if such substitution does not exist):
-            Unify(p, _q) = 𝜃 where p𝜃 = _q𝜃
+        Unify(p, _q) = 𝜃 where p𝜃 = _q𝜃
     𝜃 is said to be the (most general) unifier of the two sentences
 
     The most general unifier (MGU) is the one that compromises the variables as little as possible - the respective instance is the most general
             Unify( parent(X, bart), parent(Y, Z) ) produces 𝜃 = { Y=X, Z=bart }
 
     Example: Unification of f(X, a) and f(b, Y)
-            1. Push f(X,a) = f(b,Y)
-            2. Pop → same functor f, arity 2 → push X = b and a = Y
-            3. Pop a = Y → Y is variable and doesn't occur in a → add Y = a to θ
-            4. Pop X = b → X is variable and doesn't occur in b → add X = b to θ
-            5. Stack empty → return θ = {X = b, Y = a}
+        1. Push f(X,a) = f(b,Y)
+        2. Pop → same functor f, arity 2 → push X = b and a = Y
+        3. Pop a = Y → Y is variable and doesn't occur in a → add Y = a to θ
+        4. Pop X = b → X is variable and doesn't occur in b → add X = b to θ
+        5. Stack empty → return θ = {X = b, Y = a}
 
     Unification in Practice
     Both terms are constants: the terms unify if they are the same.
     One of the terms is a variable: it is instantiated to the other term.
     If both terms are variables, they are bound to each other.
     Two compound terms unify if:
-            They have the same functor and arity
-            All the corresponding arguments unify
-            All substitutions are compatible
+        • They have the same functor and arity
+        • All the corresponding arguments unify
+        • All substitutions are compatible
 
     ----- Computation -----
     Program P composed of Clauses - Clauses are universally quantified logical sentences
-            A:- B1, ..., Bk, k >= 0
-            A and Bi are goals
+        A:- B1, ..., Bk, k >= 0
+        A and Bi are goals
 
     Computation of a Logic Program P:
         Find an instance of a given query Q logically deducible from P
         Query is an existentially quantified conjunction
-                A1, ..., An, n > 0
-                Ai are goals
+            A1, ..., An, n > 0
+            Ai are goals
         Goal: Atom or compound term
 
     Given a program P and an initial query Q, computation terminates:
@@ -230,18 +230,18 @@
 
     Computation may not terminate (no result) .Non-termination comes from recursive rules that may not end - Avoid left-recursive rules:
 
-            ancestor(X, Y) :- ancestor(X, Z), parent(Z, Y).
+        ancestor(X, Y) :- ancestor(X, Z), parent(Z, Y).
 
-            married(homer, marge).
-            ...
-            married(X, Y):- married(Y, X).
+        married(homer, marge).
+        ...
+        married(X, Y):- married(Y, X).
 
     Resolvent is a conjunctive question (query) with the set of goals still to be processed
 
     Trace is the evolution of the computation (sequence of resolvents) with information regarding:
-        Selected goal
-        Rule selected for reduction
-        Associated substitution
+        • Selected goal
+        • Rule selected for reduction
+        • Associated substitution
 
     Reduction is the replacement, in the resolvent, of a goal G with the body of a clause whose head unifies with G
 
@@ -258,19 +258,19 @@
 
     ----- Execution Model -----
     An implementation of Logic Programming needs to instantiate the abstract interpreter, making choices that influence how the computation is performed
-        Choice of goal from resolvent
-        Choice of clause
-        Add goal(s) to resolvent
+        • Choice of goal from resolvent
+        • Choice of clause
+        • Add goal(s) to resolvent
     Different languages / implementations may make different choices to implement the abstract interpreter
 
     Prologs implementation of the abstract interpreter
         • Choice of goal from resolvent: left to right
-                Choice is arbitrary, does not affect computation (logical meaning, not operational)
+            Choice is arbitrary, does not affect computation (logical meaning, not operational)
         • Choice of clause: top to bottom with backtracking
-                Choice affects computation
+            Choice affects computation
         • Add goal(s) to resolvent: at the beginning
-                Results in a depth-first search
-                If it were to be added to the end, it would result in a breadth-first search (assuming leftmost goal is chosen next)
+            Results in a depth-first search
+            If it were to be added to the end, it would result in a breadth-first search (assuming leftmost goal is chosen next)
 
     ----- Search Trees -----
     A search tree contains all possible search paths
@@ -307,29 +307,29 @@
     ----- Recursion -----
     Recursion is based on the inductive proof One or more base clauses and one or more recursion clauses
 
-            ancestor(X, Y):-            % X is an ancestor of Y
-                parent(X, Y).           % if X is a parent of Y
+        ancestor(X, Y):-            % X is an ancestor of Y
+            parent(X, Y).           % if X is a parent of Y
 
-            ancestor(X, Y):-            % X is an ancestor of Y
-                parent(X, Z),           % if X is a parent of Z
-                ancestor(Z, Y).         % and Z is an ancestor of Y
+        ancestor(X, Y):-            % X is an ancestor of Y
+            parent(X, Z),           % if X is a parent of Z
+            ancestor(Z, Y).         % and Z is an ancestor of Y
 
     The order of clauses and goals may influence performance, or even cause infinite computations
 
-            sumN(0, 0).                 % Base clause
-            sumN(N, Sum):- N > 0,       % Guard - make sure we dont
-                N1 is N-1,              % have infinite recursion
-                sumN(N1, Sum1),         % Recursive call
-                Sum is Sum1 + N.
+        sumN(0, 0).                 % Base clause
+        sumN(N, Sum):- N > 0,       % Guard - make sure we dont
+            N1 is N-1,              % have infinite recursion
+            sumN(N1, Sum1),         % Recursive call
+            Sum is Sum1 + N.
 
     ----- Tail Recursion -----
     Tail Recursion can increase efficiency. Add a new argument to the predicate: the accumulator. Make the recursive call the last call
-            sumN(N, Sum):- sumN(N, Sum, 0).         % Encapsulate
-            sumN(0, Sum, Sum).                      % Base case - the result is
-            sumN(N, Sum, Acc):- N > 0,              % in the accumulator
-            N1 is N-1,
-            Acc1 is Acc + N,
-            sumN(N1, Sum, Acc1).                    % Recursive call is now the last sub-goal
+        sumN(N, Sum):- sumN(N, Sum, 0).         % Encapsulate
+        sumN(0, Sum, Sum).                      % Base case - the result is
+        sumN(N, Sum, Acc):- N > 0,              % in the accumulator
+        N1 is N-1,
+        Acc1 is Acc + N,
+        sumN(N1, Sum, Acc1).                    % Recursive call is now the last sub-goal
     To increase efficiency, we actually need to add a cut in the base clause
 
     ----- Arithmetic -----
@@ -338,14 +338,14 @@
     The _is_ predicate can be used to evaluate an arithmetic expression - The right-side of is needs to be instantiated
 
     Examples:
-            | ?- A = 4 + 2.             A = 4+2 ?
-                                        yes
-            | ?- B is 4 + 2.            B = 6 ?
-                                        yes
-            | ?- 6 is 4 + 2.            yes
-            | ?- 4+2 is 4+2.            No
-            | ?- C is 4+B.              ! Instation error in argument 2 of (is)/2
-                                        ! goal: _419 is 4+_427
+        | ?- A = 4 + 2.             A = 4+2 ?
+                                    yes
+        | ?- B is 4 + 2.            B = 6 ?
+                                    yes
+        | ?- 6 is 4 + 2.            yes
+        | ?- 4+2 is 4+2.            No
+        | ?- C is 4+B.              ! Instation error in argument 2 of (is)/2
+                                    ! goal: _419 is 4+_427
 
     Arithmetic expressions can be compared for (in)equality
         Expr1 =:= Expr2 evaluates both expressions and if they are equal
@@ -365,22 +365,22 @@
         X mod Y is integer remainder: X - Y * (X div Y)
 
     Examples:
-            | ?- A is 5 // 2.           A = 2 ?
-                                        yes
-            | ?- A is .5 // 2.          A = -2 ?
-                                        yes
-            | ?- A is 5 div 2.          A = 2 ?
-                                        yes
-            | ?- A is -5 div 2.         A = -3 ?
-                                        yes
-            | ?- A is 5 rem 2.          A = 1 ?
-                                        yes
-            | ?- A is -5 rem 2.         A = -1 ?
-                                        yes
-            | ?- A is 5 mod 2.          A = 1 ?
-                                        yes
-            | ?- A is -5 mod 2.         A = 1 ?
-                                        yes
+        | ?- A is 5 // 2.           A = 2 ?
+                                    yes
+        | ?- A is .5 // 2.          A = -2 ?
+                                    yes
+        | ?- A is 5 div 2.          A = 2 ?
+                                    yes
+        | ?- A is -5 div 2.         A = -3 ?
+                                    yes
+        | ?- A is 5 rem 2.          A = 1 ?
+                                    yes
+        | ?- A is -5 rem 2.         A = -1 ?
+                                    yes
+        | ?- A is 5 mod 2.          A = 1 ?
+                                    yes
+        | ?- A is -5 mod 2.         A = 1 ?
+                                    yes
 
 }
 
@@ -441,9 +441,9 @@
             X \= Y,
             memberchk(X, T).
 
-    +   -   Variável instanciada
-    -   -   Variável que não pode estar instanciada (vai passar a estar unificada)
-    ?   -   Variável híbrida (pode estar instanciada ou não)
+    +   -   Instantiated Variable
+    -   -   Non-Instantiated Variable (will be unified)
+    ?   -   Hybrid variable (can be instantiated or not)
 
     ----- Lists library -----
 
@@ -592,14 +592,14 @@
     Fail always fails. The cut is necessary to ensure the second clause is not reached when backtracking.
 
     Negation should be used with ground terms (no variables in the goal), or "strange" results may occur. Example: determine if a man is not a father
-            not_a_father(X):- not(parent(X, _)), male(X).
+        not_a_father(X):- not(parent(X, _)), male(X).
 
     Works well with instantiated values, but what about with a variable?
-            not_a_father(bart).         not_a_father(X).
-            yes                         no
+        not_a_father(bart).         not_a_father(X).
+        yes                         no
 
     Change the order of the goals so that variables in the negated goal are ground (possibly instantiated by other goals in the clause)
-            not_a_father(X):- male(X), not(parent(X, _)).
+        not_a_father(X):- male(X), not(parent(X, _)).
 
     ----- Conditional as Failure -----
     We can attain a conditional execution by using two clauses with a mutually exclusive condition verification
@@ -616,9 +616,9 @@
     Input and output cannot be undone, but variable binding (from input predicates) is undone when backtracking
 
     • read/1 reads a term (by default, from the standard input)
-            Input needs to end with a period (spans multiple lines)
-            If a compound term is being read, input must match term being read
-            Use unnamed variables (_X)
+        Input needs to end with a period (spans multiple lines)
+        If a compound term is being read, input must match term being read
+        Use unnamed variables (_X)
     • write/1 writes a term
     • nl/0 prints a new line
     • get_char obtains a single character
@@ -754,26 +754,36 @@
 
     ----- Graphs and Searches -----
     Graphs can be represented as the connections between nodes - set of facts representing [directed] edges. Searching for a possible connection between nodes is made easy by Prologs standard depth-first search mechanism
-        connected(porto, lisbon).           connects_dfs(S, F):-
-        connected(lisbon, madrid).              connected(S, F).
-        connected(lisbon, paris).           connects_dfs(S, F):-
-        connected(lisbon, porto).               connected(S, N),
-        connected(madrid, paris).               connects_dfs(N, F).
-        connected(madrid, lisbon).          | ?- connects_dfs(porto, madrid).
-        connected(paris, madrid).           yes
-        connected(paris, lisbon).           | ?- connects_dfs(madrid, porto).
-    Adapted solution with an accumulator to avoid loops
-        connects_dfs(S, F):-
-            connects_dfs(S, F, [S]).
+        connected(porto, lisbon).
+        connected(lisbon, madrid).
+        connected(lisbon, paris).
+        connected(lisbon, porto).
+        connected(madrid, paris).
+        connected(madrid, lisbon).
+        connected(paris, madrid).
+        connected(paris, lisbon).
+
+        ---- DFS ----
         connects_dfs(F, F, _Path).
         connects_dfs(S, F, T):-
             connected(S, N),
             not( memberchk(N, T) ),
             connects_dfs(N, F, [N|T]).
-        | ?- connects_dfs(madrid, porto).
-        yes
 
-    We can also easily create a BFS solution using findall
+        connects_dfs(S, F):-
+            connects_dfs(S, F, [S]).
+
+        dfs([C2 | _], C2, [C2]).
+        dfs([Ca | T], C2, [Ca | Trajectory]) :-
+            borders(Ca, L),
+            member(Cb-_, L),
+            \+ member(Cb, T),
+            dfs([Cb, Ca | T], C2, Trajectory).
+
+        trajectory(C1, C2, Trajectory) :-
+            dfs([C1], C2, Trajectory).
+
+        ---- BFS ----
         connects_bfs(S, F):-
             connects_bfs([S], F, []).
         connects_bfs([F|_], F, _V).
@@ -1063,8 +1073,6 @@
         | ?- append_dl( [a, b, c | Y ]\Y, [d, e, f | W]\W, A).
         Y=[d,e,f|W]
         A=[a,b,c,d,e,f|W]\W
-
-    ----- Statistics ----- Theres no way they ask anything about this
 
     ----- SICStus Libraries -----
     aggregate - library provides operators for SQL-like queries. Results can be aggregated using sum, count, min, max, ...
