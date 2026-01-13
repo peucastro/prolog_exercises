@@ -29,22 +29,23 @@ Sim = 0.4 ?
 yes
 */
 
-common_members([], _, []).
-common_members([H | T], L, [H | R]) :-
-    memberchk(H, L), !,
-    common_members(T, L, R).
-common_members([_ | T], L, R) :-
-    common_members(T, L, R).
+intersection([], _, []).
+intersection([H1 | T1], L2, [H1 | T]) :-
+    memberchk(H1, L2), !,
+    intersection(T1, L2, T).
+intersection([_ | T1], L2, T) :- intersection(T1, L2, T).
 
-union(Set1, Set2, Union) :-
-    append(Set1, Set2, All),
-    sort(All, Union).
+union([], L, L).
+union(L, [], L).
+union(L1, L2, Union) :-
+    append(L1, L2, L),
+    sort(L, Union).
 
 similarity(Title1, Title2, Similarity) :-
     book(Title1, _, _, _, Genres1),
     book(Title2, _, _, _, Genres2),
-    common_members(Genres1, Genres2, Intersection),
-    length(Intersection, IL),
-    union(Genres1, Genres2, Union),
-    length(Union, UL),
+    intersection(Genres1, Genres2, I),
+    length(I, IL),
+    union(Genres1, Genres2, U),
+    length(U, UL),
     Similarity is IL / UL.
