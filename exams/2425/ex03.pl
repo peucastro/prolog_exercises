@@ -25,15 +25,14 @@ Shared = ['Science fiction','Techno-thriller'] ? ;
 no
 */
 
-common_genres([], _, []).
-common_genres([X | Xs], Genres2, [X | CommonGenres]) :-
-    memberchk(X, Genres2), !,
-    common_genres(Xs, Genres2, CommonGenres).
-common_genres([X | Xs], Genres2, CommonGenres) :-
-    \+ memberchk(X, Genres2),
-    common_genres(Xs, Genres2, CommonGenres).
+common_members([], _, []).
+common_members([H | T], L, [H | R]) :-
+    memberchk(H, L), !,
+    common_members(T, L, R).
+common_members([_ | T], L, R) :-
+    common_members(T, L, R).
 
 shared_genres(Title1, Title2, CommonGenres) :-
     book(Title1, _, _, _, Genres1),
     book(Title2, _, _, _, Genres2),
-    common_genres(Genres1, Genres2, CommonGenres).
+    common_members(Genres1, Genres2, CommonGenres).
