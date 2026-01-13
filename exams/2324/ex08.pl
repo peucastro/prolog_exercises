@@ -13,7 +13,12 @@ ingredient(garlic, 6).
 
 /* Implement list_dishes(?DishIngredients), which returns a list of pairs Dish-ListOfIngredients. */
 
+ingredientgrams_to_ingredients([], []).
+ingredientgrams_to_ingredients([I-_ | T], [I | Ingredients]) :-
+    ingredientgrams_to_ingredients(T, Ingredients).
+
 list_dishes(DishIngredients) :-
-    findall(Dish-ListOfIngredients, (
-        dish(Dish, _, ListOfIngredients)
+    findall(Dish-Ingredients, (
+        dish(Dish, _, IngredientGrams),
+        ingredientgrams_to_ingredients(IngredientGrams, Ingredients)
     ), DishIngredients).

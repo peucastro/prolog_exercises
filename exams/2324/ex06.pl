@@ -20,4 +20,4 @@ Constraint: In this question, and in this question only, you are not allowed to 
 consume_ingredient(IngredientStocks, Ingredient, Grams, NewIngredientStocks) :-
     append(Prefix, [Ingredient-OriginalGrams | Suffix], IngredientStocks),
     NewGrams is OriginalGrams - Grams, NewGrams >= 0,
-    append(Prefix, [Ingredient-NewGrams | Suffix], NewIngredientStocks)
+    append(Prefix, [Ingredient-NewGrams | Suffix], NewIngredientStocks).

@@ -13,9 +13,9 @@ ingredient(garlic, 6).
 
 /* Implement count_dishes_with_ingredient(+Ingredient, ?N), which determines how many dishes use the given ingredient. */
 
-count_dishes_with_ingredient(Ingredient, N) :-
-    findall(Dish, (
-        dish(Dish, _, IngredientGrams),
-        memberchk(Ingredient-_, IngredientGrams)
-    ), L),
-    length(L, N).
+ingredientgrams_to_ingredients_aux([], Acc, Acc).
+ingredientgrams_to_ingredients_aux([I-_ | T], Acc, Ingredients) :- ingredientgrams_to_ingredients_aux(T, [I | Acc], Ingredients).
+
+ingredientgrams_to_ingredients(IngredientGrams, Ingredients) :- ingredientgrams_to_ingredients_aux(IngredientGrams, [], Ingredients).
+
+count_dishes_with_ingredient(Ingredient, N) :- count_dishes_with_ingredient_aux(Ingredient, 0, N).
